@@ -1,0 +1,30 @@
+{
+  "name": "app-fosas",
+  "version": "1.0.0",
+  "description": "Applicación para mostrar la información de fosas",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VidasContadas/app-fosas"
+  },
+  "homepage": "http://vidascontadas.org/app-fosas",
+  "author": {
+    "name": "Grupo de Vidas Contadas",
+    "url": "http://vidascontadas.org/"
+  },
+  "license": "MIT",
+  "keywords": [
+    "gis",
+    "map",
+    "leaflet",
+    "fosas",
+    "spain",
+    "graves",
+    "españa"
+  ],
+  "dependencies": {
+    "jquery": "*",
+    "mustache": "*",
+    "leaflet": "*",
+    "leaflet-search": "*"
+  }
+}

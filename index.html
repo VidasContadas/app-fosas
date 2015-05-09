@@ -1,0 +1,78 @@
+<html>
+<head>
+<title>Vidas Contadas - Mapa de Fosas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" href="node_modules/leaflet-search/dist/leaflet-search.min.css" />
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>Mapa de Fosas</h1>
+    </div>
+
+    <div class="row">
+      <div class='col-md-4'>
+        <select id="data-sets">
+          <option value=''>Seleccione la región</option>
+          <option value='andalucia'>Andalucía</option>
+          <option value='catalunya'>Cataluña</option>
+          <option value='galicia'>Galicia</option>
+        </select>
+        <div id="filters">
+          <div id="tags"></div>
+          <div id="findbox"></div>
+        </div>
+      </div>
+      <div class='col-md-8'>
+        <div id="map"></div>
+      </div>
+    </div>
+  </div>
+
+<script src="node_modules/jquery/dist/jquery.js"></script>
+<script src="node_modules/mustache/mustache.min.js"></script>
+<script src="node_modules/leaflet/dist/leaflet.js"></script>
+<script src="node_modules/leaflet-search/dist/leaflet-search.src.js"></script>
+<script src="src/fosas.js"></script>
+
+<script id="fosa-tpl" type="x-tmpl-mustache">
+<h3>{{name}}</h3>
+<div class="container-fluid fosa">
+  <div class="row properties">
+    <div class="col-md-4"><h4>Fecha</h4><div class="point-data">{{fecha}}</div></div>
+    <div class="col-md-4"><h4>Ubicación</h4><div class="point-data">{{municipio}},{{provincia}}</div></div>
+    <div class="col-md-4"><h4>Tipo</h4><div class="point-data">{{tipo}}</div></div>
+  </div>
+  <div class="row">
+    <div class="col-md-4"><h4>Contenido</h4><div class="point-data">{{contenido}}</div></div>
+    <div class="col-md-8"><h4>Victimas</h4><div class="point-data">{{victimas}}</div></div>
+  </div>
+  <hr>
+  <div class="row">
+    <div class="col-md-6">
+      <h4 for="description" class="control-label">Descripción</h4>
+      <span id="datapointdescription">{{descripcion}}</span>
+    </div>
+    <div class='col-md-6'>
+    <h4>Lugar</h4>
+    {{#foto}}
+    <img src="{{foto}}" width="200" height="100">
+    {{/foto}}
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="col-md-12">
+      <h4>Fuente</h4>
+      <div id="datapointsources">
+        </div>
+    </div>
+  </div>
+</div>
+</script>
+
+</body>
+</html>
