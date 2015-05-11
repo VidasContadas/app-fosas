@@ -1,8 +1,5 @@
 $(document).ready(function(){
-  var colors = {
-    'Estimado':'blue',
-    'Desconocido':'red',
-    };
+
   $.getJSON('datasets/fosas_comunes_andalucia.geojson',function(data){
     var template = $('#fosa-tpl').html();
     Mustache.parse(template);
@@ -13,7 +10,6 @@ $(document).ready(function(){
 
     var featuresLayer = new L.GeoJSON(data, {
         onEachFeature: function(feature, marker) {
-          //marker.bindPopup(Mustache.render(template,feature.properties),{maxWidth:'400px'});
           marker.bindPopup(L.popup({maxWidth:'400px'}).setContent(Mustache.render(template,feature.properties)));
         }
       });

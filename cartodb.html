@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Easy example | CartoDB.js</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+    <style>
+      html, body, #map {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+      }
+      #layers {
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      padding: 0;
+    }
+    #layers ul {
+      padding: 0; margin: 0;
+      list-style-type: none;
+    }
+    #layers  li {
+      border-bottom: 1px solid #999;
+      padding: 15px 30px;
+      font-family: "Helvetica", Arial;
+      font-size: 13px;
+      color: #444;
+      cursor: auto;
+    }
+
+    #layers li:hover {
+      background-color: #F0F0F0;
+      cursor: pointer;
+    }
+
+    #layers li.selected {
+      background-color: #EEE;
+    }
+    </style>
+
+    <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.14/themes/css/cartodb.css" />
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="layers" class='cartodb-infobox'>
+    </div>
+    <!-- include cartodb.js library -->
+    <script src="http://libs.cartocdn.com/cartodb.js/v3/3.14/cartodb.js"></script>
+
+    <script>
+      function createSelector(layer) {
+            var sql = new cartodb.SQL({ user: 'lowfill' });
+
+            var $options = $('#layers li');
+            $options.click(function(e) {
+              // get the area of the selected layer
+              var $li = $(e.target);
+              var selected = $li.hasClass('selected');
+              var area = 'all';
+              var query = "select * from fosas_andalucia";
+
+              // deselect all and select the clicked one
+              $options.removeClass('selected');
+              if(!selected){
+                area = $li.attr('data');
+                $li.addClass('selected');
+              }
+              if(area !== 'all') {
+                query = "select * from fosas_andalucia where contenido = '"+area+"'";
+              }
+
+console.log(query);
+              // change the query in the layer to update the map
+              layer.setSQL(query);
+
+            });
+
+      }
+      function main() {
+        var sql = new cartodb.SQL({ user: 'lowfill' });
+        sql.execute("select distinct contenido from fosas_andalucia").done(function(data){
+          if(data.total_rows>0){
+            var contenido = $("<ul>");
+            for(var i=0; i< data.rows.length; i++){
+              row = data.rows[i];
+              console.log(row);
+              contenido.append('<li data='+row.contenido+'>'+row.contenido+'</li>')
+            }
+            console.log(contenido);
+            $('#layers').append(contenido);
+          }
+        });
+        cartodb.createVis('map', 'https://lowfill.cartodb.com/api/v2/viz/a832048c-f671-11e4-a8ae-0e853d047bba/viz.json', {
+            description: true,
+            search: true,
+            tiles_loader: true,
+            zoom: 8
+        })
+        .done(function(vis, layers) {
+          // layer 0 is the base layer, layer 1 is cartodb layer
+          // setInteraction is disabled by default
+          layers[1].setInteraction(true);
+          var subLayer = layers[1].getSubLayer(0);
+          createSelector(subLayer);
+          //layers[1].on('featureOver', function(e, latlng, pos, data) {
+          //  cartodb.log.log(e, latlng, pos, data);
+          //});
+
+          // you can get the native map to work with it
+          var map = vis.getNativeMap();
+
+          // now, perform any operations you need
+          // map.setZoom(3);
+          // map.panTo([50.5, 30.5]);
+        })
+        .error(function(err) {
+          console.log(err);
+        });
+      }
+
+      window.onload = main;
+    </script>
+  </body>
+</html>
