@@ -4,3 +4,6 @@
 [submodule "vendors/leaflet-search"]
 	path = vendors/leaflet-search
 	url = git@github.com:stefanocudini/leaflet-search.git
+[submodule "scrapers"]
+	path = scrapers
+	url = git@github.com:VidasContadas/scrapers.git
