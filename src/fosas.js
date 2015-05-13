@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-  $.getJSON('datasets/fosas_comunes_andalucia.geojson',function(data){
+  $.getJSON('datasets/fosas-andalucia.geojson',function(data){
     var template = $('#fosa-tpl').html();
     Mustache.parse(template);
 
