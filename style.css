@@ -9,8 +9,13 @@
 	box-shadow: 0 0 8px #999;
 	float:right;
 	width:100%;
-	height:500px;
+	height:800px;
 }
+
+div.cartodb-popup.header div.cartodb-popup-content{
+	max-height: 450px;
+}
+/**/
 #findbox {
 	background: #eee;
 	border-radius:.125em;
