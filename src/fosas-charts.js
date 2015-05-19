@@ -1,8 +1,12 @@
 $(document).ready(
 		function() {
 			var sql = new cartodb.SQL({user:'vidascontadas'});
+			main = document.querySelectorAll(".col-md-6")[0];
+			console.log(main.clientWidth);
+			viewportWidth = (Math.min(main.clientWidth,window.innerWidth) || 500);
+			console.log(viewportWidth);
 			/* Provincias */
-			var diameter = 500, 
+			var diameter = 400, 
 			height = 400,
 			format = d3.format(",d"), 
 			color = d3.scale.category20c();
@@ -115,8 +119,6 @@ $(document).ready(
 					      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 					      ;
 
-					  console.log(data.rows);
-					    d3.select("#promotor_actuacion").append('svg');
 					    d3.select("#promotor_actuacion svg")
 					        .datum(data.rows)
 					        .transition().duration(350)
@@ -142,8 +144,6 @@ $(document).ready(
 					      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 					      ;
 
-					  console.log(data.rows);
-					    d3.select("#fosas_actuacion").append('svg');
 					    d3.select("#fosas_actuacion svg")
 					        .datum(data.rows)
 					        .transition().duration(350)

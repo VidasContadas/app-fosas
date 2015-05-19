@@ -1,6 +1,6 @@
 $(document).ready(function(){
 	/* Inicializando las visualizaciones disponibles*/
-	var mapas = $('<ul class="nav nav-pills">');
+	var mapas = $('<ul class="nav nav-pills nav-stacked">');
 	for (var i in vidasConfig){
         vis = vidasConfig[i];
         mapas.append('<li><a href="#" data='+i+'>'+vis.name+'</a></li>');
