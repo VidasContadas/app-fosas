@@ -12,369 +12,43 @@
 <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+<nav class="navbar navbar-default">
   <div class="container-fluid">
-    <div class="page-header">
-      <h1>Vidas Contadas - Mapa de Fosas</h1>
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header ">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="http://vidascontadas.org"><img src="http://vidascontadas.org/wp-content/uploads/2013/06/logo-vidas-contadas-harabara-amapola-200.png"></a>
+      <p class="navbar-text">Visualizar 2015</p>
     </div>
 
-	<div class='row'>
-		<div class='col-md-12'>
-		<h1 class='page_header'>Información consolidada</h1>
-		<div class='container-fluid'>
-			<div class='row'>
-				<div class='col-md-5 col-md-offset-1'>
-				<h2>Victimas Provincia</h2>
-				<div id="provincia"></div>
-				</div>
-				<div class='col-md-5 col-md-offset-1'>
-				<h2>Tipos de Fosas</h2>
-				<div id="tipo-fosa"></div>
-				</div>
-			</div>
-			<div class='row'>
-				<div class='col-md-5 col-md-offset-1'>
-				<h2>Fosas con actuación</h2>
-				<div id="fosas_actuacion"></div>
-				</div>
-				<div class='col-md-5 col-md-offset-1'>
-				<h2>Promotor de la actuación</h2>
-				<div id="promotor_actuacion"></div>
-				</div>
-			</div>
-		</div>
-		</div>
-	</div>
-	<div class="row">
-		<div class='col-md-12'>
-			<h1 class='page_header'>Mapas</h1>
-			<div id="mapas"></div>
-		</div>	
-	</div>
-    <div class="row">
-      <div class='col-md-3'>
-        <div id="filters">
-          <div id="statistics"></div>	
-          <div id="tags"></div>
-        </div>
-      </div>
-      <div class='col-md-9'>
-        <div id="map"></div>
-      </div>
-    </div>
-  </div>
-
-    <!-- include cartodb.js library -->
-<script src="http://libs.cartocdn.com/cartodb.js/v3/3.14/cartodb.js"></script>
-
-<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-<script src="node_modules/nvd3/nv.d3.js" /></script>
-
-<script type="text/javascript">
-var vidasConfig = {
-		'type':{'name':'Tipo de fosa'},
-		'titularidad':{'name':'Titularidad'},
-		'actuacion':{'name':'Actuación'},
-		'heatmap':{'name':'Evolución'}
-		};
-
-</script>
-<script src="src/fosas.js"></script>
-<script src="src/fosas-charts.js"></script>
-
-<!-- Visualizacion -->
-
-<!-- Titularidad -->
-<script id='titularidad-sql' type='text/template'>
-SELECT * FROM fosas
-</script>
-<style id='titularidad-css' type='cartocss/template'>
-/** category visualization */
-#fosas {
-   marker-fill-opacity: 0.9;
-   marker-line-color: #FFF;
-   marker-line-width: 1.5;
-   marker-line-opacity: 1;
-   marker-placement: point;
-   marker-type: ellipse;
-   marker-width: 10;
-   marker-allow-overlap: true;
-}
-#fosas[titularidad="Pública"] {marker-fill: #33A02C;}
-#fosas[titularidad="Privada"] {marker-fill: #1F78B4;}
-#fosas[titularidad="Sin datos"] {marker-fill: #E31A1C;}
-</style>
-<script id='titularidad-legend' type='text/template'>
-<ul>
-	<li><div class="bullet" style="background: #33A02C"></div> Pública</li>
-	<li><div class="bullet" style="background: #1F78B4"></div> Privada</li>
-	<li><div class="bullet" style="background: #E31A1C"></div> Sin datos</li>
-</ul>
-</script>
-<!-- Type -->
-<style id='type-css' type='cartocss/template'>
-/** category visualization */
-
-#fosas {
-   marker-fill-opacity: 0.9;
-   marker-line-color: #FFF;
-   marker-line-width: 1.5;
-   marker-line-opacity: 1;
-   marker-placement: point;
-   marker-type: ellipse;
-   marker-width: 8;
-   marker-allow-overlap: true;
-}
-
-#fosas[tipo="Barranco"] {
-   marker-fill: #A6CEE3;
-}
-#fosas[tipo="Carretera/Camino"] {
-   marker-fill: #1F78B4;
-}
-#fosas[tipo="Cementerio exterior"] {
-   marker-fill: #B2DF8A;
-}
-#fosas[tipo="Cementerio interior"] {
-   marker-fill: #33A02C;
-}
-#fosas[tipo="No definido"] {
-   marker-fill: #FB9A99;
-}
-#fosas[tipo="Otros"] {
-   marker-fill: #E31A1C;
-}
-#fosas[tipo="Vaguada/Barranco"] {
-   marker-fill: #FDBF6F;
-}
-#fosas[tipo="Zona edificada"] {
-   marker-fill: #FF7F00;
-}
-
-#fosas[victimas<1000]{
-	marker-width:10;
-}
-#fosas[victimas>1000]{
-	marker-width:20;
-}
-#fosas[victimas>2000]{
-	marker-width:30;
-}
-#fosas[victimas>3000]{
-	marker-width:40;
-}
-</style>
-<script id='type-sql' type='text/template'>
-SELECT * FROM fosas
-</script>
-<script id='type-legend' type='text/template'>
-<ul>
-	<li><div class="bullet" style="background: #A6CEE3"></div> Barranco</li>
-	<li><div class="bullet" style="background: #1F78B4"></div> Carretera/Camino</li>
-	<li><div class="bullet" style="background: #B2DF8A"></div> Cementerio exterior</li>
-	<li><div class="bullet" style="background: #33A02C"></div> Cementerio interior</li>
-	<li><div class="bullet" style="background: #FB9A99"></div> No definido</li>
-	<li><div class="bullet" style="background: #E31A1C"></div> Otros</li>
-	<li><div class="bullet" style="background: #FDBF6F"></div> Vaguada/Barranco</li>
-	<li><div class="bullet" style="background: #FF7F00"></div> Zona edificada</li>
-</ul>
-</script>
-
-<!-- Heatmap -->
-<style id='heatmap-css' type='cartocss/text'>
-Map {
--torque-frame-count:512;
--torque-animation-duration:10;
--torque-time-attribute:"fecha";
--torque-aggregation-function:"count(cartodb_id)";
--torque-resolution:8;
--torque-data-aggregation:cumulative;
-}
-
-#fosas{
-  image-filters: colorize-alpha(blue, cyan, lightgreen, yellow , orange, red);
-  marker-file: url(http://s3.amazonaws.com/com.cartodb.assets.static/alphamarker.png);
-  marker-fill-opacity: 0.4*[value];
-  marker-width: 35;
-}
-#fosas[frame-offset=1] {
- marker-width:37;
- marker-fill-opacity:0.2; 
-}
-#fosas[frame-offset=2] {
- marker-width:39;
- marker-fill-opacity:0.1; 
-}
-</style>
-<script id='heatmap-sql' type='text/template'>
-SELECT * FROM fosas;
-</script>
-<!-- Actuacion -->
-<style id='actuacion-css' tyep='cartocss/text'>
-/** category visualization */
-
-#fosas {
-   marker-fill-opacity: 0.9;
-   marker-line-color: #FFF;
-   marker-line-width: 1.5;
-   marker-line-opacity: 1;
-   marker-placement: point;
-   marker-type: ellipse;
-   marker-width: 10;
-   marker-allow-overlap: true;
-}
-
-#fosas[promotor_actuacion="Ayuntamiento"] {
-   marker-fill: #D6301D;
-}
-#fosas[promotor_actuacion="Entidad sin ánimo de lucro"] {
-   marker-fill: #FFCC00;
-}
-#fosas[promotor_actuacion="Familiares"] {
-   marker-fill: #055D00;
-}
-#fosas[promotor_actuacion="Otras Administraciones"] {
-   marker-fill: #2E5387;
-}
-#fosas[promotor_actuacion="Sin datos"] {
-   marker-fill: #FB9A99;
-}
-</style>
-<script id="actuacion-legend" type="text/template">
-<ul>
-	<li>		<div class="bullet" style="background: #D6301D"></div> Ayuntamiento</li>
-	<li>		<div class="bullet" style="background: #FFCC00"></div> Entidad sin ánimo de lucro</li>
-	<li>		<div class="bullet" style="background: #055D00"></div> Familiares</li>
-	<li>		<div class="bullet" style="background: #2E5387"></div> Otras Administraciones</li>
-	<li>		<div class="bullet" style="background: #FB9A99"></div> Sin datos</li>
-</ul>
-</script>
-<script id="actuacion-sql" type="text/template">
-SELECT * FROM fosas where fecha_actuacion is not null
-</script>
-
-<!-- Tooltip Template -->
-<script id="fosa-tpl" type="infowindow/html">
-<div class="cartodb-popup header blue v2">
-	<a href="#close" class="cartodb-popup-close-button close">x</a>
-	<div class="cartodb-popup-header">
-		<h1>{{municipio}}</h1>
-		<span class="separator"></span>
-	</div>
-	<div class="cartodb-popup-content-wrapper">
-		<div class="cartodb-popup-content container-fluid">
-			{{#foto}}
-			<div class="row">
-				<div class='col-md-12'>
-					<img src="{{foto}}" width="380px" height="200px">
-				</div>
-			</div>
-			{{/foto}}
-			<hr>
-			<!-- Ubicacion -->
-			<div class="row">
-				<div class='col-md-6'>
-					<h4>Provincia</h4>
-				</div>
-				<div class='col-md-6'>
-					<h4>Comunidad</h4>
-				</div>
-			</div>
-			<div class="row">
-				<div class='col-md-6'>
-					<p>{{provincia}}</p>
-				</div>
-				<div class='col-md-6'>
-					<p>{{comunidad}}</p>
-				</div>
-			</div>
-			<!-- Tipo, Titularidad -->
-
-			<div class="row">
-				<div class='col-md-6'>
-					<h4>Tipo</h4>
-				</div>
-				<div class='col-md-6'>
-					<h4>Titularidad</h4>
-				</div>
-			</div>
-			<div class="row">
-				<div class='col-md-6'>
-					<p >{{tipo}}</p>
-				</div>
-				<div class='col-md-6'>
-					<p >{{titularidad}}</p>
-				</div>
-			</div>
-
-			<!-- Fecha, Victimas -->
-			<div class="row">
-				<div class='col-md-6'>
-					<h4>Fecha</h4>
-				</div>
-				<div class='col-md-6'>
-					<h4>Victimas</h4>
-				</div>
-			</div>
-			<div class="row">
-				<div class='col-md-6'>
-					<p >{{fecha}}</p>
-				</div>
-				<div class='col-md-6'>
-					<p >{{victimas}}</p>
-				</div>
-			</div>
-
-			<!-- Descripcion -->
-			<div class="row">
-				<div class="col-md-12">
-				<h4>Descripción</h4>
-				{{descripcion}}
-				</div>
-			</div>
-			<hr>
-				<!-- Info Actuacion -->
-				{{#fecha_actuacion}}
-				<div class="row">
-					<div class='col-md-12'>
-						<h2>Actuación</h2>
-					</div>
-				</div>
-				<div class="row">
-					<div class='col-md-6'>
-						<h4>Fecha Actuación</h4>
-					</div>
-					<div class='col-md-6'>
-						<h4>Promotor</h4>
-					</div>
-				</div>
-				<div class="row">
-					<div class='col-md-6'>
-						<p >{{fecha_actuacion}}</p>
-					</div>
-					<div class='col-md-6'>
-						<p >{{promotor_actuacion}}</p>
-					</div>
-				</div>
-
-				<!-- Descripcion -->
-				<div class="row">
-					<div class="col-md-12">
-						<h4>Descripción de la actuación</h4>
-						{{descripcion_actuacion}}
-					</div>
-				</div>
-				{{/fecha_actuacion}}
-			<div class="row">
-				<div class="col-md-11">
-					<h4>Fuente</h4>
-					<a href="{{url}}" target="_blank">{{url}}</a>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="cartodb-popup-tip-container"></div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="index.html">Mapa de la memoria</a></li>
+        <li ><a href="fosas.html">Mapa de fosas</a></li>
+        <li ><a href="personas.html">Mapa de víctimas</a></li>
+        <li ><a href="mujeres.html">Mujeres Navarras</a></li>
+        <li ><a href="mujeres.html">Omeka</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+ <div class="container-fluid">
+   <div class="page-header">
+     <h1>Mapa de la memoria</h1>
+     <p>Visualización de los recursos on-line existentes sobre la represión ocurrida durante la guerra civil española y el franquismo</p>
+   </div>
 </div>
-</script>
 
+<div class='row'>
+	<div class="col-md-12">
+	<iframe width='100%' height='520' frameborder='0' src='https://vidascontadas.cartodb.com/viz/8830d920-fe40-11e4-8814-0e853d047bba/embed_map' allowfullscreen webkitallowfullscreen mozallowfullscreen oallowfullscreen msallowfullscreen></iframe>
+	</div>
+</div>
 </body>
 </html>

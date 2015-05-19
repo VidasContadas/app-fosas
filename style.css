@@ -1,3 +1,8 @@
+/*Bootstrap*/
+.navbar-brand{
+	padding:0;
+}
+/* End bootstrap*/
 #filters{
 	float:left;
 	width: 100%;
