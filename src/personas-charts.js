@@ -71,7 +71,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prov_hom").append('svg');
 						    d3.select("#prov_hom svg")
 						        .datum(data.rows)
@@ -99,7 +98,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prov_muj").append('svg');
 						    d3.select("#prov_muj svg")
 						        .datum(data.rows)
@@ -181,7 +179,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#suceso_hom").append('svg');
 						    d3.select("#suceso_hom svg")
 						        .datum(data.rows)
@@ -209,7 +206,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#suceso_muj").append('svg');
 						    d3.select("#suceso_muj svg")
 						        .datum(data.rows)
@@ -237,7 +233,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#suceso_cor").append('svg');
 						    d3.select("#suceso_cor svg")
 						        .datum(data.rows)
@@ -265,7 +260,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#suceso_lug").append('svg');
 						    d3.select("#suceso_lug svg")
 						        .datum(data.rows)
@@ -293,7 +287,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#suceso_our").append('svg');
 						    d3.select("#suceso_our svg")
 						        .datum(data.rows)
@@ -321,7 +314,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#suceso_pon").append('svg');
 						    d3.select("#suceso_pon svg")
 						        .datum(data.rows)
@@ -402,7 +394,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prof_hom").append('svg');
 						    d3.select("#prof_hom svg")
 						        .datum(data.rows)
@@ -430,7 +421,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prof_muj").append('svg');
 						    d3.select("#prof_muj svg")
 						        .datum(data.rows)
@@ -458,7 +448,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prof_cor").append('svg');
 						    d3.select("#prof_cor svg")
 						        .datum(data.rows)
@@ -486,7 +475,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prof_lug").append('svg');
 						    d3.select("#prof_lug svg")
 						        .datum(data.rows)
@@ -514,7 +502,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prof_our").append('svg');
 						    d3.select("#prof_our svg")
 						        .datum(data.rows)
@@ -542,7 +529,6 @@ $(document).ready(
 						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
 						      ;
 
-						  console.log(data.rows);
 						    d3.select("#prof_pon").append('svg');
 						    d3.select("#prof_pon svg")
 						        .datum(data.rows)
@@ -556,10 +542,77 @@ $(document).ready(
 					
 				});
 
+				/*	Bubbles */
+				sql.execute("SELECT DISTINCT provincia_fin as provincia, profesion_sector as profesion, count(*) as victimas FROM galizadb_v2_2 WHERE provincia_fin !='' AND fecha_muerte IS NOT NULL AND lat_1 IS NOT NULL GROUP BY profesion_sector,provincia_fin ORDER BY provincia_fin, profesion_sector")
+				.done(function(data){
+					nv.addGraph(function() {
+						  var chart = nv.models.scatterChart()
+						                .showDistX(true)    //showDist, when true, will display those little distribution lines on the axis.
+						                .showDistY(true)
+						                .showXAxis(false)
+						                .transitionDuration(350)
+						                .showLegend(false)
+						                .color(d3.scale.category10().range());
+
+						  //Configure how the tooltip looks.
+						  chart.tooltipContent(function(key) {
+						      return '<h3>' + key + '</h3>';
+						  });
+
+						  etiquetas = ["A Coruña","Lugo","Ourense","Pontevedra"];
+						  //chart.xRange([0,10]);
+
+						  //We want to show shapes other than circles.
+						  //chart.scatter.onlyCircles(false);
+
+						  var myData = formatBubbleData(data.rows);
+						  
+						  //Axis settings
+						  chart.yAxis.tickFormat(function(d){
+							  return myData.provincias[d-1];
+						  });
+						  chart.xAxis.tickFormat(function(d){
+							  return myData.profesiones[d-1];
+						  });
+						  
+						  d3.select('#prof_prov svg')
+						      .datum(myData.data)
+						      .call(chart);
+
+						  nv.utils.windowResize(chart.update);
+
+						  return chart;
+						});
+					
+				});
+
+					/**************************************
+					 * Simple test data generator
+					 */
+					function formatBubbleData(rows) { //# groups,# points per group
+					  var data = [],provincias=[],profesiones=[];
+
+					  for (var i=0;i < rows.length;i++){
+						  label = rows[i].provincia + ": " + rows[i].profesion + "("+rows[i].victimas+")";
+						  
+						  if(provincias.indexOf(rows[i].provincia)==-1){
+							  provincias.push(rows[i].provincia);
+						  }
+						  if(profesiones.indexOf(rows[i].profesion)==-1){
+							  profesiones.push(rows[i].profesion);
+						  }
+						  
+						  data.push({
+							 key: label,
+							 values:[{y:provincias.indexOf(rows[i].provincia)+1,x:profesiones.indexOf(rows[i].profesion)+1,size:rows[i].victimas}]
+						  });
+					  }
+					  data.push({key:'',values:[{x:0,y:0,size:0}]});
+					  data.push({key:'',values:[{x:5,y:0,size:0}]});
+					  return {'data':data,'provincias':provincias,'profesiones':profesiones};
+					}
+
 			});
+			
 		});
 
-$(document).ready(
-		function() {
-			var sql = new cartodb.SQL({user:'jmcp'});
-		});
