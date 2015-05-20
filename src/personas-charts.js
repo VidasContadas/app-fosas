@@ -1,11 +1,9 @@
 $(document).ready(
 		function() {
 			var sql = new cartodb.SQL({user:'jmcp'});
-			var svg_prov, svg_fosa;
 			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-				//var main = document.getElementById('fosas_actuacion');
-				//var viewportWidth = (Math.min(main.clientWidth,window.innerWidth) || 500);
-				viewportWidth = 500;
+				var main = document.getElementById('provincia');
+				var viewportWidth = (Math.min(main.clientWidth,window.innerWidth) || 500);
 				var width = viewportWidth * 0.8, 
 				height = viewportWidth * 0.7,
 				format = d3.format(",d"), 
@@ -125,7 +123,7 @@ $(document).ready(
 				var bubble = d3.layout.pack().sort(null).size(
 						[ diameter, height]).padding(1.5);
 
-				var svg_prov = d3.select("#suceso")
+				var svg_suc = d3.select("#suceso")
 					.append("svg").attr("width", diameter)
 					.attr("height", height)
 					.attr("class", "bubble");
@@ -139,7 +137,7 @@ $(document).ready(
 								children.push({id:"bubble-"+(index+1),name:item.label,value:item.value});
 							});
 							var nodes = {id:"bubble-0",children:children};
-							var node = svg_prov.selectAll('.node')
+							var node = svg_suc.selectAll('.node')
 								.data(bubble.nodes(nodes))
 								.enter()
 								.append('g')
@@ -346,7 +344,7 @@ $(document).ready(
 				var bubble = d3.layout.pack().sort(null).size(
 						[ diameter, height]).padding(1.5);
 
-				var svg_prov = d3.select("#profesion")
+				var svg_prof = d3.select("#profesion")
 					.append("svg").attr("width", diameter)
 					.attr("height", height)
 					.attr("class", "bubble");
@@ -360,7 +358,7 @@ $(document).ready(
 								children.push({id:"bubble-"+(index+1),name:item.label,value:item.value});
 							});
 							var nodes = {id:"bubble-0",children:children};
-							var node = svg_prov.selectAll('.node')
+							var node = svg_prof.selectAll('.node')
 								.data(bubble.nodes(nodes))
 								.enter()
 								.append('g')
