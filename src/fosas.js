@@ -1,32 +1,75 @@
 $(document).ready(function(){
 	/* Inicializando las visualizaciones disponibles*/
 	var mapas = $('<ul class="nav nav-pills nav-stacked">');
+	var index = 0;
 	for (var i in vidasConfig){
         vis = vidasConfig[i];
-        mapas.append('<li><a href="#" data='+i+'>'+vis.name+'</a></li>');
+        selected = (index==0) ? 'class="active"':'';
+        mapas.append('<li '+selected+'><a href="#" data='+i+'>'+vis.name+'</a></li>');
+        index++;
 	}
 	$('#mapas').append(mapas);
 
-	function createSelector(layer){
+	var map;
+	var torqueLayer;
+	
+	function createSelector(layer,map){
 	    var $options = $('#mapas li a');
 	    $options.click(function(e) {
 	      e.preventDefault();
 	      // get the area of the selected layer
 	      var $li = $(e.target);
-	      var selected = $li.hasClass('selected');
+	      $("#mapas li").removeClass('active');
+	      var selected = $li.parent().hasClass('active');
+	      if(!selected){
+	    	  $li.parent().addClass('active');
+	      }
 	      var type = $li.attr('data');
 	      var css = $('#'+type+'-css').html();
 	      var query = $('#'+type+'-sql').html();
 	      var legend = $('#'+type+'-legend').html();
-	      console.log('Ejecutando query ' + query);
-	      if(query!=layer.getSQL() && query!=undefined){
-	    	  layer.setSQL(query);  
+	      var config = vidasConfig[type];
+	      if(!config.torque){
+	    	  if(torqueLayer!=undefined){
+	    		  if(torqueLayer.isRunning()){
+	    			  torqueLayer.setStep(0);
+	    		  }
+	    		  torqueLayer.hide();
+	    		  $('.cartodb-timeslider').hide();
+	    		  layer.show();
+	    	  }
+		      if(query!=layer.getSQL() && query!=undefined){
+		    	  layer.setSQL(query);  
+		      }
+		      layer.setCartoCSS(css);
+		      if(legend!=undefined){
+		    	  $('.cartodb-legend').html(legend);
+		      }	    	  
 	      }
-	      console.log('cartocss ');
-	      layer.setCartoCSS(css);
-	      if(legend!=undefined){
-	    	  console.log('Legend');
-	    	  $('.cartodb-legend').html(legend);
+	      else{
+	    	layer.hide();
+	    	if(torqueLayer == undefined){
+			    torqueConfig = {
+						type:'torque',
+						options:{
+							'user_name':'vidascontadas',
+							'table_name':'fosas',
+							'loop':false,
+							'cartocss': css}
+					};
+				cartodb.createLayer(map,torqueConfig)
+				.addTo(map)
+				.done(function(layer){
+					torqueLayer = layer;
+				})
+				.error(function(errors){
+					console.log(errors);
+				});
+	    	}
+	    	else{
+	    		torqueLayer.show();
+				$('.cartodb-timeslider').show();
+	    	}
 	      }
 	    });
 	}
@@ -35,7 +78,7 @@ $(document).ready(function(){
 			shareable : false,
 			search : false,
 			infowindow: true,
-			legends: true
+			legends: true,
 	};
 	cartodb.createVis('map','https://vidascontadas.cartodb.com/api/v2/viz/428f764e-fd5d-11e4-a183-0e4fddd5de28/viz.json',options)
 	.done(function(vis, layers) {
@@ -44,9 +87,9 @@ $(document).ready(function(){
 	    layers[1].setInteraction(true);
         var subLayer = layers[1].getSubLayer(0);
         subLayer.infowindow.set({'template':$('#fosa-tpl').html(),'width':'400','maxHeight':'400'});
-        createSelector(subLayer);
 	    // you can get the native map to work with it
-	    var map = vis.getNativeMap();
+	    map = vis.getNativeMap();
+        createSelector(subLayer,map);
 
 	    // now, perform any operations you need, e.g. assuming map is a L.Map object:
 	    // map.setZoom(3);

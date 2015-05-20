@@ -3,6 +3,8 @@
 <title>Vidas Contadas - Mapa de Fosas</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="favicon.png"/>
+
 <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.14/themes/css/cartodb.css" />
 
 <link rel="stylesheet" href="node_modules/nvd3/nv.d3.css" />
@@ -29,11 +31,12 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
+        <li ><a href="info.html">Sobre el proyecto</a></li>
         <li ><a href="index.html">Mapa de la memoria</a></li>
         <li class="active"><a href="fosas.html">Mapa de fosas</a></li>
         <li ><a href="personas.html">Mapa de víctimas</a></li>
         <li ><a href="mujeres.html">Mujeres Navarras</a></li>
-        <li ><a href="omeka.html">Omeka</a></li>
+        <li ><a href="omeka.html">Catálogo de fosas</a></li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -83,7 +86,7 @@
 					        <h3>Víctimas por provincia</h3>
 					        <p>Descripcion</p>
 				    	</div>
-			      		<div id="provincia"></div>
+			      		<div id="provincia" class='chart'></div>
 			    	</div>
 		  		</div>
 			  	<div class="col-md-6">
@@ -92,7 +95,7 @@
 					        <h3>Tipos de Fosas</h3>
 					        <p>Descripcion</p>
 				    	</div>
-			      		<div id="tipo-fosa"></div>
+			      		<div id="tipo-fosa" class='chart'></div>
 			    	</div>
 		  		</div>
 			</div>
@@ -103,7 +106,7 @@
 					        <h3>Fosas con actuación</h3>
 					        <p>Descripcion</p>
 				    	</div>
-			      		<div id="fosas_actuacion" class='chart'><svg style='width: 500px;height: 400px;'></svg></div>
+			      		<div id="fosas_actuacion" class='chart'><svg></svg></div>
 			    	</div>
 		  		</div>
 			  	<div class="col-md-6">
@@ -112,7 +115,7 @@
 					        <h3>Promotor de la actuación</h3>
 					        <p>Descripcion</p>
 				    	</div>
-			      		<div id="promotor_actuacion" class='chart'><svg style='width: 500px;height: 400px;'></svg></div>
+			      		<div id="promotor_actuacion" class='chart'><svg ></svg></div>
 			    	</div>
 		  		</div>
 			</div>
@@ -123,8 +126,9 @@
 </div>
 
     <!-- include cartodb.js library -->
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<!-- <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+ -->
 <script src="http://libs.cartocdn.com/cartodb.js/v3/3.14/cartodb.js"></script>
 <script src="bootstrap/js/bootstrap.js" charset="utf-8"></script>
 
@@ -134,9 +138,9 @@
 <script type="text/javascript">
 var vidasConfig = {
 		'type':{'name':'Tipo de fosa'},
-		'titularidad':{'name':'Titularidad'},
+		//'titularidad':{'name':'Titularidad'},
 		'actuacion':{'name':'Actuación'},
-		'heatmap':{'name':'Evolución'}
+		'heatmap':{'name':'Evolución','torque':true}
 		};
 
 </script>
@@ -151,6 +155,7 @@ SELECT * FROM fosas
 </script>
 <style id='titularidad-css' type='cartocss/template'>
 /** category visualization */
+
 #fosas {
    marker-fill-opacity: 0.9;
    marker-line-color: #FFF;
@@ -164,6 +169,20 @@ SELECT * FROM fosas
 #fosas[titularidad="Pública"] {marker-fill: #33A02C;}
 #fosas[titularidad="Privada"] {marker-fill: #1F78B4;}
 #fosas[titularidad="Sin datos"] {marker-fill: #E31A1C;}
+
+#fosas[victimas<1000]{
+	marker-width:10;
+}
+#fosas[victimas>1000]{
+	marker-width:20;
+}
+#fosas[victimas>2000]{
+	marker-width:30;
+}
+#fosas[victimas>3000]{
+	marker-width:40;
+}
+
 </style>
 <script id='titularidad-legend' type='text/template'>
 <ul>
@@ -266,6 +285,19 @@ Map {
  marker-width:39;
  marker-fill-opacity:0.1; 
 }
+#fosas[victimas<1000]{
+	marker-width:10;
+}
+#fosas[victimas>1000]{
+	marker-width:20;
+}
+#fosas[victimas>2000]{
+	marker-width:30;
+}
+#fosas[victimas>3000]{
+	marker-width:40;
+}
+
 </style>
 <script id='heatmap-sql' type='text/template'>
 SELECT * FROM fosas;
@@ -300,6 +332,19 @@ SELECT * FROM fosas;
 #fosas[promotor_actuacion="Sin datos"] {
    marker-fill: #FB9A99;
 }
+#fosas[victimas<1000]{
+	marker-width:10;
+}
+#fosas[victimas>1000]{
+	marker-width:20;
+}
+#fosas[victimas>2000]{
+	marker-width:30;
+}
+#fosas[victimas>3000]{
+	marker-width:40;
+}
+
 </style>
 <script id="actuacion-legend" type="text/template">
 <ul>
