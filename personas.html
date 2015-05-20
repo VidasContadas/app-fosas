@@ -1,0 +1,538 @@
+<html>
+<head>
+<title>Vidas Contadas - Mapa de Fosas</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="shortcut icon" href="favicon.png"/>
+
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/3.14/themes/css/cartodb.css" />
+
+<link rel="stylesheet" href="node_modules/nvd3/nv.d3.css" />
+
+
+<link rel="stylesheet" href="bootstrap/css/bootstrap.css" />
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header ">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand navbar-image" href="http://vidascontadas.org"><img src="http://vidascontadas.org/wp-content/uploads/2013/06/logo-vidas-contadas-harabara-amapola-200.png"></a>
+      <a class="navbar-brand" href="http://medialab-prado.es/article/visualizar15-seminario">Visualizar 2015</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="info.html">Sobre el proyecto</a></li>
+        <li ><a href="index.html">Mapa de la memoria</a></li>
+        <li class="active"><a href="fosas.html">Mapa de fosas</a></li>
+        <li ><a href="personas.html">Mapa de víctimas</a></li>
+        <li ><a href="mujeres.html">Mujeres Navarras</a></li>
+        <li ><a href="omeka.html">Catálogo de fosas</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+  <div class="container-fluid">
+    <div class="page-header">
+      <h1>Mapa de Víctimas <small>(Galicia)</small></h1>
+    </div>
+<div role="tabpanel">
+
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist">
+    <li role="presentation" class="active"><a href="#maps-container" aria-controls="home" role="tab" data-toggle="tab">Mapas</a></li>
+    <li role="presentation"><a href="#consolidados-container" aria-controls="profile" role="tab" data-toggle="tab">Consolidados</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="maps-container">
+    <div class="container-fluid">
+    <div class="row">
+      <p></p>
+      <div class='col-md-3'>
+		<div id="mapas"></div>
+        <div id="filters">
+          <div id="statistics"></div>	
+          <div id="tags"></div>
+        </div>
+      </div>
+      <div class='col-md-9'>
+        <div id="map"></div>
+      </div>
+    </div>
+  	</div>
+  </div>
+    <div role="tabpanel" class="tab-pane" id="consolidados-container">
+	    <div class="container-fluid">
+      <p></p>
+      		<h2>Victimas por Provincia</h2>
+		    <div class="row">
+			  	<div class="col-md-6">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Provincia</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="provincia" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Hombres</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="prov_hom" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Mujeres</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="prov_muj" class='chart'></div>
+			    	</div>
+		  		</div>
+			</div>
+      		<h2>Victimas por tipo de suceso</h2>
+		    <div class="row">
+			  	<div class="col-md-6">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Total</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Hombres</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso_hom" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Mujeres</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso_muj" class='chart'></div>
+			    	</div>
+		  		</div>
+			</div>
+			
+      		<h2>Sucesos por provincia</h2>
+		    <div class="row">
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>A Coruña</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso_cor" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Lugo</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso_lug" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Ourense</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso_our" class='chart'></div>
+			    	</div>
+		  		</div>
+			  	<div class="col-md-3">
+			    	<div class="thumbnail">
+				      	<div class="caption">
+					        <h3>Pontevedra</h3>
+					        <p>Descripcion</p>
+				    	</div>
+			      		<div id="suceso_pon" class='chart'></div>
+			    	</div>
+		  		</div>
+			</div>
+			
+		</div>
+    </div>
+  </div>
+
+</div>
+
+    <!-- include cartodb.js library -->
+<!-- <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+ -->
+<script src="http://libs.cartocdn.com/cartodb.js/v3/3.14/cartodb.js"></script>
+<script src="bootstrap/js/bootstrap.js" charset="utf-8"></script>
+
+<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="node_modules/nvd3/nv.d3.js" /></script>
+
+<script type="text/javascript">
+var vidasConfig = {
+		'sexo':{'name':'Sexo'},
+		'profesiones':{'name':'Profesiones'},
+		'sucesos':{'name':'Suceso'},
+		'heatmap':{'name':'Evolución temporal','torque':true}
+		};
+
+</script>
+<script src="src/personas.js"></script>
+<script src="src/personas-charts.js"></script>
+
+<!-- Visualizacion -->
+
+<!-- Sexo -->
+<script id='sexo-sql' type='text/template'>
+SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+</script>
+<style id='sexo-css' type='cartocss/template'>
+/** category visualization */
+
+#galizadb_v2_2 {
+   marker-fill-opacity: 0.9;
+   marker-line-color: #FFF;
+   marker-line-width: 1.5;
+   marker-line-opacity: 1;
+   marker-placement: point;
+   marker-type: ellipse;
+   marker-width: 10;
+   marker-allow-overlap: true;
+}
+
+#galizadb_v2_2[sexo="hombre"] {
+   marker-fill: #F11810;
+}
+#galizadb_v2_2[sexo="mujer"] {
+   marker-fill: #6B0FB2;
+}
+</style>
+<script id='sexo-legend' type='text/template'>
+<ul>
+	<li><div class="bullet" style="background: #6B0FB2"></div> Hombre</li>
+	<li><div class="bullet" style="background: #F84F40"></div> Mujer</li>
+</ul>
+</script>
+
+<!-- Profesiones -->
+<script id='profesiones-sql' type='text/template'>
+SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+</script>
+<style id='profesiones-css' type='cartocss/template'>
+/** category visualization */
+
+#galizadb_v2_2 {
+   marker-fill-opacity: 0.9;
+   marker-line-color: #FFF;
+   marker-line-width: 1.5;
+   marker-line-opacity: 1;
+   marker-placement: point;
+   marker-type: ellipse;
+   marker-width: 10;
+   marker-allow-overlap: true;
+}
+
+#galizadb_v2_2[profesion_sector="00 Ocupaciones fuerzas del orden"] {
+   marker-fill: #A6CEE3;
+}
+#galizadb_v2_2[profesion_sector="01 Directores y gerentes"] {
+   marker-fill: #1F78B4;
+}
+#galizadb_v2_2[profesion_sector="02 Profesionales científicos e intelectuales"] {
+   marker-fill: #B2DF8A;
+}
+#galizadb_v2_2[profesion_sector="04 Personal de apoyo administrativo"] {
+   marker-fill: #33A02C;
+}
+#galizadb_v2_2[profesion_sector="05 Trabajadores de los servicios y vendedores de comercios y mercados"] {
+   marker-fill: #FB9A99;
+}
+#galizadb_v2_2[profesion_sector="06 Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros"] {
+   marker-fill: #E31A1C;
+}
+#galizadb_v2_2[profesion_sector="07 Oficiales, operarios y artesanos de artes mecánicas y de otros oficios"] {
+   marker-fill: #FDBF6F;
+}
+#galizadb_v2_2[profesion_sector="08 Operadores de instalaciones y máquinas y ensambladores"] {
+   marker-fill: #FF7F00;
+}
+#galizadb_v2_2[profesion_sector="09 Ocupaciones elementales"] {
+   marker-fill: #CAB2D6;
+}
+#galizadb_v2_2[profesion_sector="12 Estudiantes, Desempleados y Pensionistas"] {
+   marker-fill: #6A3D9A;
+}
+#galizadb_v2_2 {
+   marker-fill: #DDDDDD;
+}
+</style>
+<script id='profesiones-legend' type='text/template'>
+<ul>
+	<li><div class="bullet" style="background: #A6CEE3"></div> Ocupaciones fuerzas del orden</li>
+	<li><div class="bullet" style="background: #1F78B4"></div> Directores y gerentes</li>
+	<li><div class="bullet" style="background: #B2DF8A"></div> Profesionales científicos e intelectuales</li>
+	<li><div class="bullet" style="background: #33A02C"></div> Personal de apoyo administrativo</li>
+	<li><div class="bullet" style="background: #FB9A99"></div> Trabajadores de los servicios y vendedores de comercios y mercados</li>
+	<li><div class="bullet" style="background: #E31A1C"></div> Agricultores y trabajadores calificados agropecuarios, forestales y pesqueros</li>
+	<li><div class="bullet" style="background: #FDBF6F"></div> Oficiales, operarios y artesanos de artes mecánicas y de otros oficios</li>
+	<li><div class="bullet" style="background: #FF7F00"></div> Operadores de instalaciones y máquinas y ensambladores</li>
+	<li><div class="bullet" style="background: #CAB2D6"></div> Ocupaciones elementales</li>
+	<li><div class="bullet" style="background: #6A3D9A"></div> Estudiantes, Desempleados y Pensionistas</li>
+	<li><div class="bullet" style="background: #DDDDDD"></div> Profesión desconocida</li>
+</ul>
+</script>
+
+<!-- Sucesos -->
+<script id='sucesos-sql' type='text/template'>
+SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+</script>
+<style id='sucesos-css' type='cartocss/template'>
+/** category visualization */
+
+#galizadb_v2_2 {
+   marker-fill-opacity: 0.9;
+   marker-line-color: #FFF;
+   marker-line-width: 1.5;
+   marker-line-opacity: 1;
+   marker-placement: point;
+   marker-type: ellipse;
+   marker-width: 10;
+   marker-allow-overlap: true;
+}
+
+#galizadb_v2_2[suceso="Otras tipologías represivas"] {
+   marker-fill: #A6CEE3;
+}
+#galizadb_v2_2[suceso="Paseo"] {
+   marker-fill: #1F78B4;
+}
+#galizadb_v2_2[suceso="Prisión"] {
+   marker-fill: #B2DF8A;
+}
+#galizadb_v2_2[suceso="Proceso"] {
+   marker-fill: #33A02C;
+}
+#galizadb_v2_2[suceso="Sanción"] {
+   marker-fill: #FB9A99;
+}
+#galizadb_v2_2[suceso="desaparición"] {
+   marker-fill: #E31A1C;
+}
+#galizadb_v2_2[suceso="detención"] {
+   marker-fill: #FDBF6F;
+}
+#galizadb_v2_2[suceso="ejecución"] {
+   marker-fill: #FF7F00;
+}
+#galizadb_v2_2[suceso="ejecución fuera de Galicia"] {
+   marker-fill: #CAB2D6;
+}
+#galizadb_v2_2[suceso="muerte (otras tipologías)"] {
+   marker-fill: #6A3D9A;
+}
+#galizadb_v2_2 {
+   marker-fill: #DDDDDD;
+}
+</style>
+<script id='sucesos-legend' type='text/template'>
+<ul>
+	<li><div class="bullet" style="background: #A6CEE3"></div> Otras tipologías represivas</li>
+	<li><div class="bullet" style="background: #1F78B4"></div> Paseo</li>
+	<li><div class="bullet" style="background: #B2DF8A"></div> Prisión</li>
+	<li><div class="bullet" style="background: #33A02C"></div> Proceso</li>
+	<li><div class="bullet" style="background: #FB9A99"></div> Sanción</li>
+	<li><div class="bullet" style="background: #E31A1C"></div> Desaparición</li>
+	<li><div class="bullet" style="background: #FDBF6F"></div> Detención</li>
+	<li><div class="bullet" style="background: #FF7F00"></div> Ejecución</li>
+	<li><div class="bullet" style="background: #CAB2D6"></div> Ejecución fuera de Galicia</li>
+	<li><div class="bullet" style="background: #6A3D9A"></div> Muerte (otras tipologías)</li>
+	<li><div class="bullet" style="background: #DDDDDD"></div> Sin datos</li>
+</ul>
+</script>
+
+<!-- Heatmap -->
+<script id='heatmap-sql' type='text/template'>
+SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+</script>
+<style id='heatmap-css' type='cartocss/text'>
+/** torque_heat visualization */
+
+Map {
+-torque-frame-count:512;
+-torque-animation-duration:20;
+-torque-time-attribute:"fecha_muerte";
+-torque-aggregation-function:"count(cartodb_id)";
+-torque-resolution:1;
+-torque-data-aggregation:cumulative;
+}
+
+#galizadb_v2_2{
+  image-filters: colorize-alpha(#B81609, #B81609, #B40903, #B40903 , #B40903, #850200);
+  marker-file: url(http://s3.amazonaws.com/com.cartodb.assets.static/alphamarker.png);
+  marker-fill-opacity: 0.2*[value];
+  marker-width: 24;
+}
+#galizadb_v2_2[frame-offset=1] {
+ marker-width:25;
+ marker-fill-opacity:0.2; 
+}
+#galizadb_v2_2[frame-offset=2] {
+ marker-width:26;
+ marker-fill-opacity:0.2; 
+}
+</style>
+<script id='heatmap-sql' type='text/template'>
+SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+</script>
+
+<!-- Tooltip Template -->
+<script id="fosa-tpl" type="infowindow/html">
+<div class="cartodb-popup header blue v2">
+	<a href="#close" class="cartodb-popup-close-button close">x</a>
+	<div class="cartodb-popup-header">
+		<h1>{{municipio}}</h1>
+		<span class="separator"></span>
+	</div>
+	<div class="cartodb-popup-content-wrapper">
+		<div class="cartodb-popup-content container-fluid">
+			{{#foto}}
+			<div class="row">
+				<div class='col-md-12'>
+					<img src="{{foto}}" width="380px" height="200px">
+				</div>
+			</div>
+			{{/foto}}
+			<hr>
+			<!-- Ubicacion -->
+			<div class="row">
+				<div class='col-md-6'>
+					<h4>Provincia</h4>
+				</div>
+				<div class='col-md-6'>
+					<h4>Comunidad</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class='col-md-6'>
+					<p>{{provincia}}</p>
+				</div>
+				<div class='col-md-6'>
+					<p>{{comunidad}}</p>
+				</div>
+			</div>
+			<!-- Tipo, Titularidad -->
+
+			<div class="row">
+				<div class='col-md-6'>
+					<h4>Tipo</h4>
+				</div>
+				<div class='col-md-6'>
+					<h4>Titularidad</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class='col-md-6'>
+					<p >{{tipo}}</p>
+				</div>
+				<div class='col-md-6'>
+					<p >{{titularidad}}</p>
+				</div>
+			</div>
+
+			<!-- Fecha, Victimas -->
+			<div class="row">
+				<div class='col-md-6'>
+					<h4>Fecha</h4>
+				</div>
+				<div class='col-md-6'>
+					<h4>Victimas</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class='col-md-6'>
+					<p >{{fecha}}</p>
+				</div>
+				<div class='col-md-6'>
+					<p >{{victimas}}</p>
+				</div>
+			</div>
+
+			<!-- Descripcion -->
+			<div class="row">
+				<div class="col-md-12">
+				<h4>Descripción</h4>
+				{{descripcion}}
+				</div>
+			</div>
+			<hr>
+				<!-- Info Actuacion -->
+				{{#fecha_actuacion}}
+				<div class="row">
+					<div class='col-md-12'>
+						<h2>Actuación</h2>
+					</div>
+				</div>
+				<div class="row">
+					<div class='col-md-6'>
+						<h4>Fecha Actuación</h4>
+					</div>
+					<div class='col-md-6'>
+						<h4>Promotor</h4>
+					</div>
+				</div>
+				<div class="row">
+					<div class='col-md-6'>
+						<p >{{fecha_actuacion}}</p>
+					</div>
+					<div class='col-md-6'>
+						<p >{{promotor_actuacion}}</p>
+					</div>
+				</div>
+
+				<!-- Descripcion -->
+				<div class="row">
+					<div class="col-md-12">
+						<h4>Descripción de la actuación</h4>
+						{{descripcion_actuacion}}
+					</div>
+				</div>
+				{{/fecha_actuacion}}
+			<div class="row">
+				<div class="col-md-11">
+					<h4>Fuente</h4>
+					<a href="{{url}}" target="_blank">{{url}}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="cartodb-popup-tip-container"></div>
+</div>
+</script>
+
+</body>
+</html>
