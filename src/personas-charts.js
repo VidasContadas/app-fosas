@@ -2,6 +2,7 @@ $(document).ready(
 		function() {
 			var sql = new cartodb.SQL({user:'jmcp'});
 			$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+				//TODO Revisar graficas repetidas de burbujas
 				var main = document.getElementById('provincia');
 				var viewportWidth = (Math.min(main.clientWidth,window.innerWidth) || 500);
 				var width = viewportWidth * 0.8, 
@@ -387,6 +388,7 @@ $(document).ready(
 						  var chart = nv.models.pieChart()
 						      .x(function(d) { return d.label })
 						      .y(function(d) { return d.value })
+						      .showLegend(false)
 						      .showLabels(true)     //Display pie labels
 						      .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
 						      .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
@@ -414,6 +416,7 @@ $(document).ready(
 						  var chart = nv.models.pieChart()
 						      .x(function(d) { return d.label })
 						      .y(function(d) { return d.value })
+						      .showLegend(false)
 						      .showLabels(true)     //Display pie labels
 						      .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
 						      .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
@@ -434,113 +437,7 @@ $(document).ready(
 					
 				});
 
-				/* Profesiones coruña*/
-				sql.execute("SELECT profesion_sector as label,count(profesion_sector) as value FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL group by label order by value")
-				.done(function(data){
-					nv.addGraph(function() {
-						  var chart = nv.models.pieChart()
-						      .x(function(d) { return d.label })
-						      .y(function(d) { return d.value })
-						      .showLabels(true)     //Display pie labels
-						      .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
-						      .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
-						      .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
-						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
-						      ;
 
-						    d3.select("#prof_cor").append('svg');
-						    d3.select("#prof_cor svg")
-						        .datum(data.rows)
-						        .transition().duration(350)
-						        .call(chart);
-
-						  return chart;
-						});
-				})
-				.error(function(errors){
-					
-				});
-
-				/* Profesiones lugo*/
-				sql.execute("SELECT profesion_sector as label,count(profesion_sector) as value FROM galizadb_v2_2 WHERE provincia_fin IN ('Lugo') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL group by label order by value")
-				.done(function(data){
-					nv.addGraph(function() {
-						  var chart = nv.models.pieChart()
-						      .x(function(d) { return d.label })
-						      .y(function(d) { return d.value })
-						      .showLabels(true)     //Display pie labels
-						      .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
-						      .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
-						      .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
-						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
-						      ;
-
-						    d3.select("#prof_lug").append('svg');
-						    d3.select("#prof_lug svg")
-						        .datum(data.rows)
-						        .transition().duration(350)
-						        .call(chart);
-
-						  return chart;
-						});
-				})
-				.error(function(errors){
-					
-				});
-
-				/* Profesiones ourense*/
-				sql.execute("SELECT profesion_sector as label,count(profesion_sector) as value FROM galizadb_v2_2 WHERE provincia_fin IN ('Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL group by label order by value")
-				.done(function(data){
-					nv.addGraph(function() {
-						  var chart = nv.models.pieChart()
-						      .x(function(d) { return d.label })
-						      .y(function(d) { return d.value })
-						      .showLabels(true)     //Display pie labels
-						      .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
-						      .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
-						      .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
-						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
-						      ;
-
-						    d3.select("#prof_our").append('svg');
-						    d3.select("#prof_our svg")
-						        .datum(data.rows)
-						        .transition().duration(350)
-						        .call(chart);
-
-						  return chart;
-						});
-				})
-				.error(function(errors){
-					
-				});
-
-				/* Profesiones pontevedra*/
-				sql.execute("SELECT profesion_sector as label,count(profesion_sector) as value FROM galizadb_v2_2 WHERE provincia_fin IN ('Pontevedra') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL group by label order by value")
-				.done(function(data){
-					nv.addGraph(function() {
-						  var chart = nv.models.pieChart()
-						      .x(function(d) { return d.label })
-						      .y(function(d) { return d.value })
-						      .showLabels(true)     //Display pie labels
-						      .labelThreshold(.05)  //Configure the minimum slice size for labels to show up
-						      .labelType("percent") //Configure what type of data to show in the label. Can be "key", "value" or "percent"
-						      .donut(true)          //Turn on Donut mode. Makes pie chart look tasty!
-						      .donutRatio(0.35)     //Configure how big you want the donut hole size to be.
-						      ;
-
-						    d3.select("#prof_pon").append('svg');
-						    d3.select("#prof_pon svg")
-						        .datum(data.rows)
-						        .transition().duration(350)
-						        .call(chart);
-
-						  return chart;
-						});
-				})
-				.error(function(errors){
-					
-				});
 
 				/*	Bubbles */
 				sql.execute("SELECT DISTINCT provincia_fin as provincia, profesion_sector as profesion, count(*) as victimas FROM galizadb_v2_2 WHERE provincia_fin !='' AND fecha_muerte IS NOT NULL AND lat_1 IS NOT NULL GROUP BY profesion_sector,provincia_fin ORDER BY provincia_fin, profesion_sector")
@@ -558,9 +455,6 @@ $(document).ready(
 						  chart.tooltipContent(function(key) {
 						      return '<h3>' + key + '</h3>';
 						  });
-
-						  etiquetas = ["A Coruña","Lugo","Ourense","Pontevedra"];
-						  //chart.xRange([0,10]);
 
 						  //We want to show shapes other than circles.
 						  //chart.scatter.onlyCircles(false);
@@ -586,31 +480,28 @@ $(document).ready(
 					
 				});
 
-					/**************************************
-					 * Simple test data generator
-					 */
-					function formatBubbleData(rows) { //# groups,# points per group
-					  var data = [],provincias=[],profesiones=[];
+				function formatBubbleData(rows) { //# groups,# points per group
+				  var data = [],provincias=[],profesiones=[];
 
-					  for (var i=0;i < rows.length;i++){
-						  label = rows[i].provincia + ": " + rows[i].profesion + "("+rows[i].victimas+")";
-						  
-						  if(provincias.indexOf(rows[i].provincia)==-1){
-							  provincias.push(rows[i].provincia);
-						  }
-						  if(profesiones.indexOf(rows[i].profesion)==-1){
-							  profesiones.push(rows[i].profesion);
-						  }
-						  
-						  data.push({
-							 key: label,
-							 values:[{y:provincias.indexOf(rows[i].provincia)+1,x:profesiones.indexOf(rows[i].profesion)+1,size:rows[i].victimas}]
-						  });
+				  for (var i=0;i < rows.length;i++){
+					  label = rows[i].provincia + ": " + rows[i].profesion + "("+rows[i].victimas+")";
+					  
+					  if(provincias.indexOf(rows[i].provincia)==-1){
+						  provincias.push(rows[i].provincia);
 					  }
-					  data.push({key:'',values:[{x:0,y:0,size:0}]});
-					  data.push({key:'',values:[{x:5,y:0,size:0}]});
-					  return {'data':data,'provincias':provincias,'profesiones':profesiones};
-					}
+					  if(profesiones.indexOf(rows[i].profesion)==-1){
+						  profesiones.push(rows[i].profesion);
+					  }
+					  
+					  data.push({
+						 key: label,
+						 values:[{y:provincias.indexOf(rows[i].provincia)+1,x:profesiones.indexOf(rows[i].profesion)+1,size:rows[i].victimas}]
+					  });
+				  }
+				  data.push({key:'',values:[{x:0,y:0,size:0}]});
+				  data.push({key:'',values:[{x:5,y:0,size:0}]});
+				  return {'data':data,'provincias':provincias,'profesiones':profesiones};
+				}
 
 			});
 			
