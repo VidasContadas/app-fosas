@@ -80,7 +80,7 @@ $(document).ready(function(){
 			infowindow: true,
 			legends: true,
 	};
-	cartodb.createVis('map','https://jmcp.cartodb.com/api/v2/viz/60f6d21a-ff08-11e4-b955-0e018d66dc29/viz.json',options)	
+	cartodb.createVis('map','https://jmcp.cartodb.com/api/v2/viz/7963af92-fee2-11e4-9c98-0e0c41326911/viz.json',options)	
 	.done(function(vis, layers) {
 	    // layer 0 is the base layer, layer 1 is cartodb layer
 	    // when setInteraction is disabled featureOver is triggered
