@@ -1,6 +1,6 @@
 <html>
 <head>
-<title>Vidas Contadas - Mapa de Fosas</title>
+<title>Vidas Contadas - Mapa de víctimas</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="favicon.png"/>
@@ -33,8 +33,8 @@
       <ul class="nav navbar-nav">
         <li ><a href="info.html">Sobre el proyecto</a></li>
         <li ><a href="index.html">Mapa de la memoria</a></li>
-        <li class="active"><a href="fosas.html">Mapa de fosas</a></li>
-        <li ><a href="personas.html">Mapa de víctimas</a></li>
+        <li ><a href="fosas.html">Mapa de fosas</a></li>
+        <li class="active"><a href="personas.html">Mapa de víctimas</a></li>
         <li ><a href="mujeres.html">Mujeres Navarras</a></li>
         <li ><a href="omeka.html">Catálogo de fosas</a></li>
       </ul>
@@ -235,9 +235,9 @@
 <script type="text/javascript">
 var vidasConfig = {
 		'sexo':{'name':'Sexo'},
-		'profesiones':{'name':'Profesiones'},
+		//'profesiones':{'name':'Profesiones'},
 		'sucesos':{'name':'Suceso'},
-		'heatmap':{'name':'Evolución temporal','torque':true}
+		'torque':{'name':'Evolución temporal','torque':true}
 		};
 
 </script>
@@ -248,27 +248,38 @@ var vidasConfig = {
 
 <!-- Sexo -->
 <script id='sexo-sql' type='text/template'>
-SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+SELECT DISTINCT the_geom_webmercator, min(cartodb_id) as cartodb_id, localizacion_1, provincia_fin, sexo as var, count (*) as victimas FROM galizadb_v2_2 WHERE provincia_fin != '' AND fecha_muerte IS NOT NULL AND lat_1 IS NOT NULL AND cartodb_id IS NOT NULL GROUP BY var, localizacion_1, provincia_fin, the_geom_webmercator ORDER BY var, localizacion_1, provincia_fin
 </script>
 <style id='sexo-css' type='cartocss/template'>
 /** category visualization */
 
 #galizadb_v2_2 {
-   marker-fill-opacity: 0.9;
    marker-line-color: #FFF;
-   marker-line-width: 1.5;
+   marker-line-width: 0.5;
    marker-line-opacity: 1;
    marker-placement: point;
    marker-type: ellipse;
-   marker-width: 10;
    marker-allow-overlap: true;
 }
-
-#galizadb_v2_2[sexo="hombre"] {
-   marker-fill: #F11810;
+#galizadb_v2_2[var="hombre"] {
+   marker-fill-opacity: 0.5;
+   marker-fill: #2167AB;
 }
-#galizadb_v2_2[sexo="mujer"] {
-   marker-fill: #6B0FB2;
+#galizadb_v2_2[var="mujer"] {
+   marker-fill-opacity: 1;
+   marker-fill: #F84F40;
+}
+#galizadb_v2_2[victimas<20]{
+	marker-width:15;
+}
+#galizadb_v2_2[victimas>50]{
+	marker-width:30;
+}
+#galizadb_v2_2[victimas>100]{
+	marker-width:45;
+}
+#galizadb_v2_2[victimas>200]{
+	marker-width:60;
 }
 </style>
 <script id='sexo-legend' type='text/template'>
@@ -348,13 +359,13 @@ SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lu
 
 <!-- Sucesos -->
 <script id='sucesos-sql' type='text/template'>
-SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
+SELECT DISTINCT the_geom_webmercator, min(cartodb_id) as cartodb_id, localizacion_1, provincia_fin, suceso as var, count (*) as victimas FROM galizadb_v2_2 WHERE provincia_fin != '' AND fecha_muerte IS NOT NULL AND lat_1 IS NOT NULL AND cartodb_id IS NOT NULL GROUP BY var, localizacion_1, provincia_fin, the_geom_webmercator ORDER BY var, localizacion_1, provincia_fin
 </script>
 <style id='sucesos-css' type='cartocss/template'>
 /** category visualization */
 
 #galizadb_v2_2 {
-   marker-fill-opacity: 0.9;
+   marker-fill-opacity: 0.5;
    marker-line-color: #FFF;
    marker-line-width: 1.5;
    marker-line-opacity: 1;
@@ -364,38 +375,50 @@ SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lu
    marker-allow-overlap: true;
 }
 
-#galizadb_v2_2[suceso="Otras tipologías represivas"] {
+#galizadb_v2_2[var="Paseo"] {
    marker-fill: #A6CEE3;
 }
-#galizadb_v2_2[suceso="Paseo"] {
+#galizadb_v2_2[var="Prisión"] {
    marker-fill: #1F78B4;
 }
-#galizadb_v2_2[suceso="Prisión"] {
+#galizadb_v2_2[var="Proceso"] {
    marker-fill: #B2DF8A;
 }
-#galizadb_v2_2[suceso="Proceso"] {
+#galizadb_v2_2[var="campo de exterminio"] {
    marker-fill: #33A02C;
 }
-#galizadb_v2_2[suceso="Sanción"] {
+#galizadb_v2_2[var="campo trabajos forzados - gulag"] {
    marker-fill: #FB9A99;
 }
-#galizadb_v2_2[suceso="desaparición"] {
+#galizadb_v2_2[var="desaparición"] {
    marker-fill: #E31A1C;
 }
-#galizadb_v2_2[suceso="detención"] {
+#galizadb_v2_2[var="detención"] {
    marker-fill: #FDBF6F;
 }
-#galizadb_v2_2[suceso="ejecución"] {
+#galizadb_v2_2[var="ejecución"] {
    marker-fill: #FF7F00;
 }
-#galizadb_v2_2[suceso="ejecución fuera de Galicia"] {
+#galizadb_v2_2[var="ejecución fuera de Galicia"] {
    marker-fill: #CAB2D6;
 }
-#galizadb_v2_2[suceso="muerte (otras tipologías)"] {
+#galizadb_v2_2[var="muerte (otras tipologías)"] {
    marker-fill: #6A3D9A;
 }
 #galizadb_v2_2 {
    marker-fill: #DDDDDD;
+}
+#galizadb_v2_2[victimas<10]{
+	marker-width:10;
+}
+#galizadb_v2_2[victimas>25]{
+	marker-width:20;
+}
+#galizadb_v2_2[victimas>50]{
+	marker-width:40;
+}
+#galizadb_v2_2[victimas>100]{
+	marker-width:60;
 }
 </style>
 <script id='sucesos-legend' type='text/template'>
@@ -414,12 +437,12 @@ SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lu
 </ul>
 </script>
 
-<!-- Heatmap -->
-<script id='heatmap-sql' type='text/template'>
+<!-- torque -->
+<script id='torque-sql' type='text/template'>
 SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
 </script>
-<style id='heatmap-css' type='cartocss/text'>
-/** torque_heat visualization */
+<style id='torque-css' type='cartocss/text'>
+/** torque visualization */
 
 Map {
 -torque-frame-count:512;
@@ -427,25 +450,25 @@ Map {
 -torque-time-attribute:"fecha_muerte";
 -torque-aggregation-function:"count(cartodb_id)";
 -torque-resolution:1;
--torque-data-aggregation:cumulative;
+-torque-data-aggregation:linear;
 }
 
 #galizadb_v2_2{
-  image-filters: colorize-alpha(#B81609, #B81609, #B40903, #B40903 , #B40903, #850200);
-  marker-file: url(http://s3.amazonaws.com/com.cartodb.assets.static/alphamarker.png);
-  marker-fill-opacity: 0.2*[value];
-  marker-width: 24;
+  comp-op: multiply;
+  marker-fill-opacity: 0.5;
+  marker-line-color: #FFF;
+  marker-line-width: 0;
+  marker-line-opacity: 1;
+  marker-type: ellipse;
+  marker-width: 6;
+  marker-fill: #F11810;
 }
 #galizadb_v2_2[frame-offset=1] {
- marker-width:25;
- marker-fill-opacity:0.2; 
-}
-#galizadb_v2_2[frame-offset=2] {
- marker-width:26;
- marker-fill-opacity:0.2; 
+ marker-width:8;
+ marker-fill-opacity:0.25; 
 }
 </style>
-<script id='heatmap-sql' type='text/template'>
+<script id='torque-sql' type='text/template'>
 SELECT * FROM galizadb_v2_2 WHERE provincia_fin IN ('A Coruña','Pontevedra','Lugo','Ourense') AND provincia_fin IS NOT NULL AND fecha_muerte IS NOT NULL
 </script>
 
