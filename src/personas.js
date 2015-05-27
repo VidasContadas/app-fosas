@@ -12,7 +12,7 @@ $(document).ready(function(){
 
 	var map;
 	var torqueLayer;
-
+	
 	function createSelector(layer,map){
 	    var $options = $('#mapas li a');
 	    $options.click(function(e) {
@@ -39,12 +39,12 @@ $(document).ready(function(){
 	    		  layer.show();
 	    	  }
 		      if(query!=layer.getSQL() && query!=undefined){
-		    	  layer.setSQL(query);
+		    	  layer.setSQL(query);  
 		      }
 		      layer.setCartoCSS(css);
 		      if(legend!=undefined){
 		    	  $('.cartodb-legend').html(legend);
-		      }
+		      }	    	  
 	      }
 	      else{
 	    	layer.hide();
@@ -63,6 +63,7 @@ $(document).ready(function(){
 					torqueLayer = layer;
 				})
 				.error(function(errors){
+					console.log(errors);
 				});
 	    	}
 	    	else{
@@ -72,14 +73,14 @@ $(document).ready(function(){
 	      }
 	    });
 	}
-
+	
 	options = {
 			shareable : false,
 			search : false,
 			infowindow: true,
 			legends: true,
 	};
-	cartodb.createVis('map','https://jmcp.cartodb.com/api/v2/viz/84085bfa-fee7-11e4-8982-0e853d047bba/viz.json',options)
+	cartodb.createVis('map','https://jmcp.cartodb.com/api/v2/viz/60f6d21a-ff08-11e4-b955-0e018d66dc29/viz.json',options)	
 	.done(function(vis, layers) {
 	    // layer 0 is the base layer, layer 1 is cartodb layer
 	    // when setInteraction is disabled featureOver is triggered
