@@ -4,9 +4,9 @@
 
 Esta presentación a cargo de [Alberto Labarga Gutiérrez] [r1] en el marco de [Visualizar'15 Datos para el bien común (Commoning Data)][r2], como parte del programa **Ojo al data. Cultura, política y economía del dato** explica nuestra participación en dicho programa
 
-Este repositorio recoge nuesro trabajo que puede verse en http://vidascontadas.github.io/app-fosas/
+Este repositorio recoge nuesro trabajo que puede verse en http://vidascontadas.github.io/vc-prototipos/
 
 [r1]: http://medialab-prado.es/mmedia/15824/view 
 [r2]: http://medialab-prado.es/article/visualizar15-seminario
-[r3]: http://vidascontadas.github.io/app-fosas/
+[r3]: http://vidascontadas.github.io/vc-prototipos
 [r4]: http://vidascontadas.org
